@@ -13,7 +13,7 @@ app.set('view engine', 'html');
 app.engine('html', ejs.__express);
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/" + "login.html");
+    res.sendFile(__dirname + "/public/" + "login.html");
 })
 
 app.post('/main', urlencodedParser, function (req, res) {
@@ -34,7 +34,7 @@ app.post('/main', urlencodedParser, function (req, res) {
                     } else {
                         console.log("user " + username + " login in");
                         currentUser = username;
-                        res.sendFile(__dirname + "/" + "main.html");
+                        res.sendFile(__dirname + "/public/" + "main.html");
                     }
                 });
             }
@@ -43,7 +43,7 @@ app.post('/main', urlencodedParser, function (req, res) {
 })
 
 app.get('/write', function (req, res) {
-    res.sendFile(__dirname + "/" + "write.html");
+    res.sendFile(__dirname + "/public/" + "write.html");
 })
 app.get('/read', urlencodedParser,function (req, res) {
     basic(function (con) {
@@ -77,7 +77,7 @@ app.get('/read', urlencodedParser,function (req, res) {
             });
         });
     }, "mail");
-    res.sendFile(__dirname + "/" + "read.html");
+    res.sendFile(__dirname + "/public/" + "read.html");
 })
 app.post('/login', urlencodedParser, function (req, res) {
     basic(function (con) {
@@ -109,10 +109,10 @@ app.post('/login', urlencodedParser, function (req, res) {
                     });
                     
                 });
-                res.sendFile(__dirname + "/" + "login.html");
+                res.sendFile(__dirname + "/public/" + "login.html");
             }else{
                 console.log("用户名已存在");
-                res.sendFile(__dirname + "/" + "register.html");
+                res.sendFile(__dirname + "/public/" + "register.html");
             }
         }); 
        
@@ -165,10 +165,10 @@ app.post("/send", urlencodedParser,function (req, res) {
         });
     }, "mail");
     console.log("邮件发送成功!");
-    res.sendFile(__dirname + "/" + "main.html");
+    res.sendFile(__dirname + "/public/" + "main.html");
 })
 app.get('/quit', urlencodedParser, function (req, res) {
     console.log("user-"+currentUser+"-quit");
-    res.sendFile(__dirname + "/" + "login.html");
+    res.sendFile(__dirname + "/public/" + "login.html");
 })
 app.listen(3000);
