@@ -73,7 +73,6 @@ app.get('/read', urlencodedParser,function (req, res) {
                        sender1=item.sender;
                        content1=item.content;
                     });
-                    res.render("read.html",{title:title1,content:content1,sender:sender1});
                 });
             });
         });
@@ -127,16 +126,49 @@ app.post("/send", urlencodedParser,function (req, res) {
         var title = req.body.title;
         var content = req.body.content;
         var sender = currentUser;
+        var id1=11;
+        var receiver1="11";
+        var id2=22;
         var sql = "insert into mail(title,content,sender,receiver) values('" + title + "','" + content + "','" + sender + "','" + receiver + "')";
         con.query(sql, function (err, result) {
             if (err) throw err;
             console.log("mail sended");
-            // console.log(result);
             console.log(currentUser);
+            var sql2="select id from mail where receiver ='"+receiver+"'";
+            con.query(sql2, function (err, result) {
+                if (err) throw err;
+                result.forEach(function (item) {
+                    id1=item.id;
+                });
+                var sql3="select id from mailbox where address ='"+receiver+"'";
+                con.query(sql3, function (err, result) {
+                    console.log(result);
+                    if (err) throw err;
+                    if(result.length === 0){
+                        console.log("目标邮箱不存在！");
+                    }else{
+                        result.forEach(function (item) {
+                            console.log(item.id);
+                            id2=item.id;
+                            console.log(id2);
+                            var sql4="insert into mail_mailbox(mail,mailbox) values("+id1+","+id2+")";
+                            con.query(sql4, function (err, result) {
+                                if (err) throw err;
+                                console.log("mail_mailbox updated");
+                            });
+                        });
+                    }
+                   
+
+                });
+            });
         });
     }, "mail");
     console.log("邮件发送成功!");
     res.sendFile(__dirname + "/" + "main.html");
 })
-
+app.get('/quit', urlencodedParser, function (req, res) {
+    console.log("user-"+currentUser+"-quit");
+    res.sendFile(__dirname + "/" + "login.html");
+})
 app.listen(3000);
